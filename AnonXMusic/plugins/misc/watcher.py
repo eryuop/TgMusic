@@ -166,7 +166,11 @@ async def chat_watcher_func(_, message: Message):
                 try:
                     print(2)
                     get_user = found[j]
-                    user = await client.get_users(get_user)
+                    print(get_user)
+                    try:
+                        user = await client.get_users(get_user)
+                    except Exception as ex:
+                        print(ex)
                     print(3)
                     if user.id == replied_user_id:
                         print(4)
