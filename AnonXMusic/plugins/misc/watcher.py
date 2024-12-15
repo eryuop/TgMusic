@@ -161,19 +161,25 @@ async def chat_watcher_func(_, message: Message):
         j = 0
         for x in range(len(entity)):
             if (entity[j].type) == MessageEntityType.MENTION:
+                print(1)
                 found = re.findall("@([_0-9a-zA-Z]+)", message.text)
                 try:
+                    print(2)
                     get_user = found[j]
                     user = await client.get_users(get_user)
+                    print(3)
                     if user.id == replied_user_id:
+                        print(4)
                         j += 1
                         continue
                 except:
+                    print(5)
                     j += 1
                     continue
                 usern = ("@" + user.username) if user.username else user.first_name
                 verifier, reasondb = await is_afk(user.id)
                 if verifier:
+                    print(6)
                     try:
                         afktype = reasondb["type"]
                         timeafk = reasondb["time"]
