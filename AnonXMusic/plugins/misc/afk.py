@@ -13,6 +13,7 @@ async def active_afk(_, message: Message):
     if message.sender_chat:
         return
     user_id = message.from_user.id
+    uname = ("@" + message.from_user.username) if message.from_user.username else message.from_user.first_name
     verifier, reasondb = await is_afk(user_id)
     if verifier:
         await remove_afk(user_id)
@@ -24,56 +25,56 @@ async def active_afk(_, message: Message):
             seenago = get_readable_time(int(time.time() - timeafk))
             if afktype == "text":
                 send = await message.reply_text(
-                    f"{message.from_user.first_name} ɪs ʙᴀᴄᴋ ᴏɴʟɪɴᴇ ᴀɴᴅ ᴡᴀs ᴀᴡᴀʏ ғᴏʀ {seenago}",
+                    f"{uname} ɪs ʙᴀᴄᴋ ᴏɴʟɪɴᴇ ᴀɴᴅ ᴡᴀs ᴀᴡᴀʏ ғᴏʀ {seenago}",
                     disable_web_page_preview=True,
                 )
             elif afktype == "text_reason":
                 send = await message.reply_text(
-                    f"{message.from_user.first_name} ɪs ʙᴀᴄᴋ ᴏɴʟɪɴᴇ ᴀɴᴅ ᴡᴀs ᴀᴡᴀʏ ғᴏʀ {seenago}\n\n<b>ʀᴇᴀsᴏɴ :</b> {reasonafk}",
+                    f"{uname} ɪs ʙᴀᴄᴋ ᴏɴʟɪɴᴇ ᴀɴᴅ ᴡᴀs ᴀᴡᴀʏ ғᴏʀ {seenago}\n\n<b>ʀᴇᴀsᴏɴ :</b> {reasonafk}",
                     disable_web_page_preview=True,
                 )
             elif afktype == "animation":
                 if not reasonafk:
                     send =  await message.reply_animation(
                         data,
-                        caption=f"{message.from_user.first_name} ɪs ʙᴀᴄᴋ ᴏɴʟɪɴᴇ ᴀɴᴅ ᴡᴀs ᴀᴡᴀʏ ғᴏʀ {seenago}",
+                        caption=f"{uname} ɪs ʙᴀᴄᴋ ᴏɴʟɪɴᴇ ᴀɴᴅ ᴡᴀs ᴀᴡᴀʏ ғᴏʀ {seenago}",
                     )
                 else:
                     send = await message.reply_animation(
                         data,
-                        caption=f"{message.from_user.first_name} ɪs ʙᴀᴄᴋ ᴏɴʟɪɴᴇ ᴀɴᴅ ᴡᴀs ᴀᴡᴀʏ ғᴏʀ {seenago}\n\n<b>ʀᴇᴀsᴏɴ :</b> {reasonafk}",
+                        caption=f"{uname} ɪs ʙᴀᴄᴋ ᴏɴʟɪɴᴇ ᴀɴᴅ ᴡᴀs ᴀᴡᴀʏ ғᴏʀ {seenago}\n\n<b>ʀᴇᴀsᴏɴ :</b> {reasonafk}",
                     )
             elif afktype == "photo":
                 if not reasonafk:
                     send = await message.reply_photo(
                         photo=data,
-                        caption=f"{message.from_user.first_name} ɪs ʙᴀᴄᴋ ᴏɴʟɪɴᴇ ᴀɴᴅ ᴡᴀs ᴀᴡᴀʏ ғᴏʀ {seenago}",
+                        caption=f"{uname} ɪs ʙᴀᴄᴋ ᴏɴʟɪɴᴇ ᴀɴᴅ ᴡᴀs ᴀᴡᴀʏ ғᴏʀ {seenago}",
                     )
                 else:
                     send = await message.reply_photo(
                         data,
-                        caption=f"{message.from_user.first_name} ɪs ʙᴀᴄᴋ ᴏɴʟɪɴᴇ ᴀɴᴅ ᴡᴀs ᴀᴡᴀʏ ғᴏʀ {seenago}\n\n<b>ʀᴇᴀsᴏɴ :</b> {reasonafk}",
+                        caption=f"{uname} ɪs ʙᴀᴄᴋ ᴏɴʟɪɴᴇ ᴀɴᴅ ᴡᴀs ᴀᴡᴀʏ ғᴏʀ {seenago}\n\n<b>ʀᴇᴀsᴏɴ :</b> {reasonafk}",
                     )
             elif afktype == "sticker":
                 if not reasonafk:
                     send = await message.reply_photo(
                         photo=await app.download_media(data, file_name=f"{user_id}.jpg"),
-                        caption=f"{message.from_user.first_name} ɪs ʙᴀᴄᴋ ᴏɴʟɪɴᴇ ᴀɴᴅ ᴡᴀs ᴀᴡᴀʏ ғᴏʀ {seenago}",
+                        caption=f"{uname} ɪs ʙᴀᴄᴋ ᴏɴʟɪɴᴇ ᴀɴᴅ ᴡᴀs ᴀᴡᴀʏ ғᴏʀ {seenago}",
                     )
                 else:
                     send = await message.reply_photo(
                         photo=await app.download_media(data, file_name=f"{user_id}.jpg"),
-                        caption=f"{message.from_user.first_name} ɪs ʙᴀᴄᴋ ᴏɴʟɪɴᴇ ᴀɴᴅ ᴡᴀs ᴀᴡᴀʏ ғᴏʀ {seenago}\n\n<b>ʀᴇᴀsᴏɴ :</b> {reasonafk}",
+                        caption=f"{uname} ɪs ʙᴀᴄᴋ ᴏɴʟɪɴᴇ ᴀɴᴅ ᴡᴀs ᴀᴡᴀʏ ғᴏʀ {seenago}\n\n<b>ʀᴇᴀsᴏɴ :</b> {reasonafk}",
                     )
         except Exception as ex:
             print(ex)
             send =  await message.reply_text(
-                f"{message.from_user.first_name} ɪs ʙᴀᴄᴋ ᴏɴʟɪɴᴇ.",
+                f"{uname} ɪs ʙᴀᴄᴋ ᴏɴʟɪɴᴇ.",
                 disable_web_page_preview=True,
             )
 
     send = await message.reply_text(
-        f"{message.from_user.first_name} ɪs ɴᴏᴡ ᴀғᴋ !"
+        f"{uname} ɪs ɴᴏᴡ ᴀғᴋ !"
     )
     if len(message.command) == 1 and not message.reply_to_message:
         details = {
