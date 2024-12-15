@@ -26,7 +26,7 @@ async def chat_watcher_func(_, message: Message):
     if not message.from_user:
         return
     userid = message.from_user.id
-    user_name = message.from_user.first_name
+    user_name = ("@" + message.from_user.username) if message.from_user.username else message.from_user.first_name
     if message.entities:
         possible = ["/afk", f"/afk@{app.username}"]
         message_text = message.text or message.caption
@@ -98,7 +98,7 @@ async def chat_watcher_func(_, message: Message):
     # Replied to a User which is AFK
     if message.reply_to_message:
         try:
-            replied_first_name = message.reply_to_message.from_user.first_name
+            replied_first_name = ("@" + message.reply_to_message.from_user.username) if message.reply_to_message.from_user.username else message.reply_to_message.from_user.first_name
             replied_user_id = message.reply_to_message.from_user.id
             verifier, reasondb = await is_afk(replied_user_id)
             if verifier:
@@ -171,6 +171,7 @@ async def chat_watcher_func(_, message: Message):
                 except:
                     j += 1
                     continue
+                usern = ("@" + user.username) if user.username else user.first_name
                 verifier, reasondb = await is_afk(user.id)
                 if verifier:
                     try:
@@ -182,30 +183,30 @@ async def chat_watcher_func(_, message: Message):
                             int(time.time() - timeafk)
                         )
                         if afktype == "text":
-                            msg += f"{user.first_name} ɪs ᴀғᴋ sɪɴᴄᴇ {seenago}"
+                            msg += f"{usern} ɪs ᴀғᴋ sɪɴᴄᴇ {seenago}"
                         elif afktype == "text_reason":
-                            msg += f"{user.first_name} ɪs ᴀғᴋ sɪɴᴄᴇ {seenago}\n\n<b>ʀᴇᴀsᴏɴ :</b> {reasonafk}"
+                            msg += f"{usern} ɪs ᴀғᴋ sɪɴᴄᴇ {seenago}\n\n<b>ʀᴇᴀsᴏɴ :</b> {reasonafk}"
                         elif afktype == "animation":
                             if not reasonafk:
                                 send = await message.reply_animation(
                                     data,
-                                    caption=f"{user.first_name} ɪs ᴀғᴋ sɪɴᴄᴇ {seenago}",
+                                    caption=f"{usern} ɪs ᴀғᴋ sɪɴᴄᴇ {seenago}",
                                 )
                             else:
                                 send = await message.reply_animation(
                                     data,
-                                    caption=f"{user.first_name} ɪs ᴀғᴋ sɪɴᴄᴇ {seenago}\n\n<b>ʀᴇᴀsᴏɴ :</b> {reasonafk}",
+                                    caption=f"{usern} ɪs ᴀғᴋ sɪɴᴄᴇ {seenago}\n\n<b>ʀᴇᴀsᴏɴ :</b> {reasonafk}",
                                 )
                         elif afktype == "photo":
                             if not reasonafk:
                                 send = await message.reply_photo(
                                     data,
-                                    caption=f"{user.first_name} ɪs ᴀғᴋ sɪɴᴄᴇ {seenago}",
+                                    caption=f"{usern} ɪs ᴀғᴋ sɪɴᴄᴇ {seenago}",
                                 )
                             else:
                                 send = await message.reply_photo(
                                     data,
-                                    caption=f"{user.first_name} ɪs ᴀғᴋ sɪɴᴄᴇ {seenago}\n\n<b>ʀᴇᴀsᴏɴ :</b> {reasonafk}",
+                                    caption=f"{usern} ɪs ᴀғᴋ sɪɴᴄᴇ {seenago}\n\n<b>ʀᴇᴀsᴏɴ :</b> {reasonafk}",
                                 )
                         elif afktype == "sticker":
                             if os.path.exists(f"downloads/{user.id}.jpg"):
@@ -215,16 +216,16 @@ async def chat_watcher_func(_, message: Message):
                             if not reasonafk:
                                 send = await message.reply_photo(
                                     photo=med,
-                                    caption=f"{user.first_name} ɪs ᴀғᴋ sɪɴᴄᴇ {seenago}",
+                                    caption=f"{usern} ɪs ᴀғᴋ sɪɴᴄᴇ {seenago}",
                                 )
                             else:
                                 send = await message.reply_photo(
                                     photo=med,
-                                    caption=f"{user.first_name} ɪs ᴀғᴋ sɪɴᴄᴇ {seenago}\n\n<b>ʀᴇᴀsᴏɴ :</b> {reasonafk}",
+                                    caption=f"{usern} ɪs ᴀғᴋ sɪɴᴄᴇ {seenago}\n\n<b>ʀᴇᴀsᴏɴ :</b> {reasonafk}",
                                 )
                     except:
                         msg += (
-                            f"{user.first_name} ɪs ᴀғᴋ."
+                            f"{usern} ɪs ᴀғᴋ."
                         )
             elif (entity[j].type) == MessageEntityType.TEXT_MENTION:
                 try:
@@ -232,7 +233,7 @@ async def chat_watcher_func(_, message: Message):
                     if user_id == replied_user_id:
                         j += 1
                         continue
-                    first_name = entity[j].user.first_name
+                    first_name = ("@" + entity[j].user.username) if entity[j].user.username else entity[j].user.first_name
                 except:
                     j += 1
                     continue
