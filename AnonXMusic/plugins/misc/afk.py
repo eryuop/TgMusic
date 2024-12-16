@@ -4,7 +4,8 @@ from pyrogram import filters
 from pyrogram.types import Message
 
 from AnonXMusic import app
-from AnonXMusic.utils.database import add_afk, is_afk, remove_afk
+from AnonXMusic.misc import SUDOERS
+from AnonXMusic.utils.database import add_afk, is_afk, remove_afk, get_afk_users
 from AnonXMusic.utils.formatters import get_readable_time
 
 
@@ -176,3 +177,13 @@ async def active_afk(_, message: Message):
             "reason": None,
         }
     await add_afk(user_id, details)
+
+
+@app.on_message(filters.command("afklist") & SUDOERS)
+async def total_users(_, message: Message):
+    afk_users = []
+    chats = await get_afk_users()
+    for chat in chats:
+        afk_users.append(int(chat["user_id"]))
+    users = len(afk_users)
+    await message.reply_text(f"Total AFK Users on Bot: {users}")
